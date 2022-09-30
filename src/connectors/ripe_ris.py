@@ -15,7 +15,6 @@ class RIS:
         params = {
             "prefix": self.prefix,
             "moreSpecific": True,
-            "require": "withdrawals",
             "type": "UPDATE",
             "socketOptions": {
                 "acknowledge": False    #TODO: Make sure the channel is opened
