@@ -12,6 +12,7 @@ class Subscribe:
         self.subscribed = {}
         for prefix in prefixes:
             self.subscribed[prefix] = RIS(prefix, dispatch)
+            print("Subscribed for", prefix)
 
     async def run(self):
         sub_job = []
