@@ -1,4 +1,4 @@
-from ..connectors import RIS
+from .ris_connector import RIS
 import asyncio
 
 #TODO: Check if every prefix is valid
