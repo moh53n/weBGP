@@ -8,11 +8,18 @@ class Subscribe:
 
     subscribed = None
 
-    def __init__(self, prefixes, dispatch):
+    def __init__(self, prefixes, handler):
         self.subscribed = {}
-        for prefix in prefixes:
-            self.subscribed[prefix] = RIS(prefix, dispatch)
+        if len(prefixes) > 8:
+            print("Too many prefixes to subscribe, subscribing to 0.0.0.0/0 and filtering locally...")
+            handler.set_large_prefixes(prefixes)
+            prefix = "0.0.0.0/0"
+            self.subscribed[prefix] = RIS(prefix, handler)
             print("Subscribed for", prefix)
+        else:
+            for prefix in prefixes:
+                self.subscribed[prefix] = RIS(prefix, handler)
+                print("Subscribed for", prefix)
 
     async def run(self):
         sub_job = []

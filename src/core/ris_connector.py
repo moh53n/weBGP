@@ -5,10 +5,10 @@ import websockets
 class RIS:
     prefix = None
     ws_url = None
-    dispatch = None
-    def __init__(self, prefix, dispatch):
+    handler = None
+    def __init__(self, prefix, handler):
         self.prefix = prefix
-        self.dispatch = dispatch
+        self.handler = handler
         self.ws_url = "wss://ris-live.ripe.net/v1/ws/?client=weBGP"
 
     async def subscribe(self):
@@ -40,4 +40,4 @@ class RIS:
                     final_msg['announcements'].extend(ann['prefixes'])
             if 'withdrawals' in msg['data'].keys():
                 final_msg['withdrawals'] = msg['data']['withdrawals'].copy()
-            self.dispatch(final_msg)
+            self.handler.dispatch(final_msg)

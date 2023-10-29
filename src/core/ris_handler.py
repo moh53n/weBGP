@@ -13,10 +13,16 @@ class Handler:
         self.offlines = {}
         self.offline_queue = {}
         self.online_queue = {}
+        self.large_prefixes = None
 
-    def dispatch(self, msg):
+    def set_large_prefixes(self, prefixes):
+        self.large_prefixes = prefixes
+
+    def dispatch(self, msg):    #TODO: Shitty code and flow, needs refactor and optimization
         if msg['withdrawals']:
             for off in msg['withdrawals']:
+                if self.large_prefixes is not None and off not in self.large_prefixes:
+                    continue
                 if off not in self.offlines.keys():
                     if off in self.offline_queue.keys():
                         self.offline_queue[off]['peers'] += 1
@@ -31,6 +37,8 @@ class Handler:
                         }
         if msg['announcements']:
             for on in msg['announcements']:
+                if self.large_prefixes is not None and on not in self.large_prefixes:
+                    continue
                 if on in self.offlines.keys():
                     if on in self.online_queue.keys():
                         self.online_queue[on]['peers'] += 1

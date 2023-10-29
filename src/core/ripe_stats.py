@@ -17,6 +17,11 @@ def fetch_country(country: str) -> dict:
 
     return payload['data']['resources']
 
+def fetch_country_ip(country: str) -> list:
+    resources = fetch_country(country)
+    ip = resources['ipv4'] + resources['ipv6']
+    return ip
+
 def fetch_asn_holder(asn: int) -> str:
     res = requests.get(f"https://stat.ripe.net/data/as-overview/data.json?resource={asn}")
     if res.status_code != 200:

@@ -5,6 +5,6 @@ import asyncio
 class Core:
     def __init__(self, prefixes):
         handler = Handler()
-        sub = Subscribe(prefixes, handler.dispatch)
+        sub = Subscribe(prefixes, handler)
         asyncio.run(sub.run())
         
