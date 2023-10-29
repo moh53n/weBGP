@@ -1,4 +1,4 @@
-from .core import Core
+from src.core.core import Core
 import sys
 
 #TODO: This is temporary, we have to implement config system

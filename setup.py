@@ -10,7 +10,7 @@ setuptools.setup(
     version="0.0",
     author="Mohsen Tahmasebi",
     author_email="moh53n@outlook.com",
-    description="BGP outage monitoring tool",
+    description="BGP insight tool",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/moh53n/weBGP",
@@ -24,7 +24,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
     license='MIT',
-    install_requires=['websockets'],
+    install_requires=['websockets', 'iso3166', 'requests'],
     entry_points={
     'console_scripts': [
         'weBGP = src.core.console:main',
