@@ -16,7 +16,7 @@ class Handler:
         self.large_prefixes = None
 
     def set_large_prefixes(self, prefixes):
-        self.large_prefixes = prefixes
+        self.large_prefixes = set(prefixes)
 
     def dispatch(self, msg):    #TODO: Shitty code and flow, needs refactor and optimization
         if msg['withdrawals']:
