@@ -1,7 +1,6 @@
 import json
 import websockets
 
-#TODO: Implement reconnection
 class RIS:
     prefix = None
     ws_url = None
@@ -21,10 +20,14 @@ class RIS:
                 "acknowledge": False    #TODO: Make sure the channel is opened
             }
         }
-        async with websockets.connect(self.ws_url) as ws:
-            await ws.send(json.dumps({"type": "ris_subscribe", "data": params}))
-            async for message in ws:
-                self.handle(message)
+        async for ws in websockets.connect(self.ws_url):
+            try:
+                await ws.send(json.dumps({"type": "ris_subscribe", "data": params}))
+                async for message in ws:
+                    self.handle(message)
+            except:
+                print("Socket disconnected, reconnecting...")
+                continue
 
     def handle(self, msg):
         msg = json.loads(msg)
