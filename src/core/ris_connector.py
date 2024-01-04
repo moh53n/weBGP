@@ -13,7 +13,6 @@ class RIS:
     async def subscribe(self):
         params = {
             "prefix": self.prefix,
-            "host": "rrc00.ripe.net",
             "moreSpecific": True,
             "type": "UPDATE",
             "socketOptions": {
