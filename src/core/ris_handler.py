@@ -45,10 +45,11 @@ class Handler:
                     if on in self.online_queue.keys():
                         self.online_queue[on]['peers'] += 1
                         if self.online_queue[on]['peers'] >= 40:    #TODO: Let the user set this
+                            offline_for = self.online_queue[on]["time"] - self.offlines[on]
                             del(self.online_queue[on])    #TODO: Possible race condition?
                             del(self.offlines[on])
                             print(on, "ONLINE on", msg['peer'])    #TODO: Report
-                            ws_server.dispatch_submit_update(f'{{"prefix": {on}, "update": "online"}}')
+                            ws_server.dispatch_submit_update(f'{{"prefix": {on}, "update": "online", "offline_for": {offline_for}}}')
                     else:
                         self.online_queue[on] = {
                             "time": int(time.time()),
