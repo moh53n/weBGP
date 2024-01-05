@@ -1,5 +1,6 @@
 from src.core.core import Core
 from src.core.ripe_stats import fetch_country_ip
+from src.ws_server.main import WS_Main
 import sys
 
 #TODO: This is temporary, we have to implement config system
@@ -11,4 +12,7 @@ def main():
             prefixes = fetch_country_ip(sys.argv[1].strip().capitalize())
         else:
             prefixes = sys.argv[1].strip().split(",")
-        Core(prefixes)
+
+        ws_server = WS_Main()
+        Core(prefixes, ws_server)
+        ws_server.run_server()

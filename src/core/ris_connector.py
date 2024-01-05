@@ -10,7 +10,7 @@ class RIS:
         self.handler = handler
         self.ws_url = "wss://ris-live.ripe.net/v1/ws/?client=weBGP"
 
-    async def subscribe(self):
+    async def subscribe(self, ws_server):
         params = {
             "prefix": self.prefix,
             "moreSpecific": True,
@@ -23,12 +23,12 @@ class RIS:
             try:
                 await ws.send(json.dumps({"type": "ris_subscribe", "data": params}))
                 async for message in ws:
-                    self.handle(message)
+                    self.handle(message, ws_server)
             except:
                 print("Socket disconnected, reconnecting...")
                 continue
 
-    def handle(self, msg):
+    def handle(self, msg, ws_server):
         msg = json.loads(msg)
         if msg['type'] == 'ris_message':
             final_msg = {
@@ -43,4 +43,4 @@ class RIS:
                     final_msg['announcements'].extend(ann['prefixes'])
             if 'withdrawals' in msg['data'].keys():
                 final_msg['withdrawals'] = msg['data']['withdrawals'].copy()
-            self.handler.dispatch(final_msg)
+            self.handler.dispatch(final_msg, ws_server)

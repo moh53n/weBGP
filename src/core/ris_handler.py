@@ -18,7 +18,7 @@ class Handler:
     def set_large_prefixes(self, prefixes):
         self.large_prefixes = set(prefixes)
 
-    def dispatch(self, msg):    #TODO: Shitty code and flow, needs refactor and optimization
+    def dispatch(self, msg, ws_server):    #TODO: Shitty code and flow, needs refactor and optimization
         if msg['withdrawals']:
             for off in msg['withdrawals']:
                 if self.large_prefixes is not None and off not in self.large_prefixes:
@@ -30,6 +30,7 @@ class Handler:
                             del(self.offline_queue[off])    #TODO: Possible race condition?
                             self.offlines[off] = int(time.time())
                             print(off, "OFFLINE")    #TODO: Report
+                            ws_server.dispatch_submit_update(f'{{"prefix": {off}, "update": "offline"}}')
                     else:
                         self.offline_queue[off] = {
                             "time": int(time.time()),
@@ -46,6 +47,7 @@ class Handler:
                             del(self.online_queue[on])    #TODO: Possible race condition?
                             del(self.offlines[on])
                             print(on, "ONLINE on", msg['peer'])    #TODO: Report
+                            ws_server.dispatch_submit_update(f'{{"prefix": {on}, "update": "online"}}')
                     else:
                         self.online_queue[on] = {
                             "time": int(time.time()),
