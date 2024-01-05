@@ -38,8 +38,8 @@ class RIS:
             }
             final_msg['peer'] = msg['data']['peer']
             if 'announcements' in msg['data'].keys():
+                final_msg['announcements'] = []
                 for ann in msg['data']['announcements']:
-                    final_msg['announcements'] = []
                     final_msg['announcements'].extend(ann['prefixes'])
             if 'withdrawals' in msg['data'].keys():
                 final_msg['withdrawals'] = msg['data']['withdrawals'].copy()
