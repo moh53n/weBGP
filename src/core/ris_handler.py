@@ -1,6 +1,7 @@
 import time
 
 #TODO: Probably we're going to have race conditions, fix the async thing by making sure where to wait
+#TODO: Yes we're having race condition and delays, must work with the timestamp of the RIS message
 #TODO: Implement the queue time limit
 #TODO: Store peer list in the queue
 class Handler:
