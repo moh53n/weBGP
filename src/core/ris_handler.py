@@ -29,11 +29,11 @@ class Handler:
                         self.offline_queue[off]['peers'] += 1
                         if self.offline_queue[off]['peers'] >= 40:    #TODO: Let the user set this
                             del(self.offline_queue[off])    #TODO: Possible race condition?
-                            self.offlines[off] = int(time.time())
+                            self.offlines[off] = int(msg['timestamp'])
                             ws_server.dispatch_submit_update(f'{{"prefix": {off}, "update": "offline"}}')
                     else:
                         self.offline_queue[off] = {
-                            "time": int(time.time()),
+                            "time": int(msg['timestamp']),
                             "peers": 1
                         }
         if msg['announcements']:
@@ -50,6 +50,6 @@ class Handler:
                             ws_server.dispatch_submit_update(f'{{"prefix": {on}, "update": "online", "offline_for": {offline_for}}}')
                     else:
                         self.online_queue[on] = {
-                            "time": int(time.time()),
+                            "time": int(msg['timestamp']),
                             "peers": 1
                         }

@@ -34,7 +34,8 @@ class RIS:
             final_msg = {
                 "peer": None,
                 "announcements": None,
-                "withdrawals": None
+                "withdrawals": None,
+                "timestamp": None
             }
             final_msg['peer'] = msg['data']['peer']
             if 'announcements' in msg['data'].keys():
@@ -43,4 +44,6 @@ class RIS:
                     final_msg['announcements'].extend(ann['prefixes'])
             if 'withdrawals' in msg['data'].keys():
                 final_msg['withdrawals'] = msg['data']['withdrawals'].copy()
+            if 'timestamp' in msg['data'].keys():
+                final_msg['timestamp'] = msg['data']["timestamp"]
             self.handler.dispatch(final_msg, ws_server)
