@@ -53,3 +53,8 @@ class Handler:
                             "time": int(msg['timestamp']),
                             "peers": 1
                         }
+                elif on in self.offline_queue.keys() and int(msg['timestamp']) > self.offline_queue[on]['time']:
+                    if self.offline_queue[on]['peers'] <= 1:
+                        del(self.offline_queue[on])
+                    else:
+                        self.offline_queue[on]['peers'] -= 1
