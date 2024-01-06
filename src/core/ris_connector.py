@@ -24,8 +24,8 @@ class RIS:
                 await ws.send(json.dumps({"type": "ris_subscribe", "data": params}))
                 async for message in ws:
                     self.handle(message, ws_server)
-            except:
-                print("Socket disconnected, reconnecting...")
+            except Exception as e:
+                print(f"Socket disconnected ({e}), reconnecting...")
                 continue
 
     def handle(self, msg, ws_server):
