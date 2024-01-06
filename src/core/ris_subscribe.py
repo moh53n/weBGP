@@ -8,9 +8,9 @@ class Subscribe:
 
     subscribed = None
 
-    def __init__(self, prefixes, handler, ws_server):
+    def __init__(self, prefixes, handler, fifo):
         self.subscribed = {}
-        self.ws_server = ws_server
+        self.fifo = fifo
         if len(prefixes) > 8:
             print("Too many prefixes to subscribe, subscribing to 0.0.0.0/0 and filtering locally...")
             handler.set_large_prefixes(prefixes)
@@ -25,5 +25,5 @@ class Subscribe:
     async def run(self):
         sub_job = []
         for prefix in self.subscribed.values():
-            sub_job.append(prefix.subscribe(self.ws_server))
+            sub_job.append(prefix.subscribe(self.fifo))
         await asyncio.gather(*sub_job)

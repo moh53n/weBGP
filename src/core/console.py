@@ -1,6 +1,7 @@
 from src.core.core import Core
 from src.core.ripe_stats import fetch_country_ip
 from src.ws_server.main import WS_Main
+from src.core.FIFO import FIFO
 import sys
 
 #TODO: This is temporary, we have to implement config system
@@ -14,5 +15,6 @@ def main():
             prefixes = sys.argv[1].strip().split(",")
 
         ws_server = WS_Main()
-        Core(prefixes, ws_server)
+        fifo = FIFO(ws_server)
+        Core(prefixes, fifo)
         ws_server.run_server()

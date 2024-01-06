@@ -4,8 +4,10 @@ import asyncio
 import threading
 
 class Core:
-    def __init__(self, prefixes, ws_server):
+    def __init__(self, prefixes, fifo):
         handler = Handler()
-        sub = Subscribe(prefixes, handler, ws_server)
-        thread = threading.Thread(target=asyncio.run, args=(sub.run(),))
-        thread.start()
+        fifo_thread = threading.Thread(target=fifo.runner, args=())
+        fifo_thread.start()
+        sub = Subscribe(prefixes, handler, fifo)
+        sub_thread = threading.Thread(target=asyncio.run, args=(sub.run(),))
+        sub_thread.start()

@@ -19,7 +19,7 @@ class Handler:
     def set_large_prefixes(self, prefixes):
         self.large_prefixes = set(prefixes)
 
-    def dispatch(self, msg, ws_server):    #TODO: Shitty code and flow, needs refactor and optimization
+    def dispatch(self, msg, fifo):    #TODO: Shitty code and flow, needs refactor and optimization
         if msg['withdrawals']:
             for off in msg['withdrawals']:
                 if self.large_prefixes is not None and off not in self.large_prefixes:
@@ -30,7 +30,7 @@ class Handler:
                         if self.offline_queue[off]['peers'] >= 40:    #TODO: Let the user set this
                             self.offlines[off] = self.offline_queue[off]['time']
                             del(self.offline_queue[off])    #TODO: Possible race condition?
-                            ws_server.dispatch_submit_update(f'{{"prefix": {off}, "update": "offline"}}')
+                            fifo.add(f'{{"prefix": {off}, "update": "offline"}}')
                     else:
                         self.offline_queue[off] = {
                             "time": int(msg['timestamp']),
@@ -47,7 +47,7 @@ class Handler:
                             offline_for = self.online_queue[on]["time"] - self.offlines[on]
                             del(self.online_queue[on])    #TODO: Possible race condition?
                             del(self.offlines[on])
-                            ws_server.dispatch_submit_update(f'{{"prefix": {on}, "update": "online", "offline_for": {offline_for}}}')
+                            fifo.add(f'{{"prefix": {on}, "update": "online", "offline_for": {offline_for}}}')
                     else:
                         self.online_queue[on] = {
                             "time": int(msg['timestamp']),
