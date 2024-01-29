@@ -31,7 +31,7 @@ class Handler:
                         if self.offline_queue[off]['peers'] >= 40:    #TODO: Let the user set this
                             self.offlines[off] = self.offline_queue[off]['time']
                             del(self.offline_queue[off])    #TODO: Possible race condition?
-                            fifo.add(f'{{"prefix": {off}, "update": "offline"}}')
+                            fifo.add(f'{{"prefix": "{off}", "update": "offline"}}')
                     else:
                         self.offline_queue[off] = {
                             "time": int(msg['timestamp']),
@@ -48,7 +48,7 @@ class Handler:
                             offline_for = self.online_queue[on]["time"] - self.offlines[on]
                             del(self.online_queue[on])    #TODO: Possible race condition?
                             del(self.offlines[on])
-                            fifo.add(f'{{"prefix": {on}, "update": "online", "offline_for": {offline_for}}}')
+                            fifo.add(f'{{"prefix": "{on}", "update": "online", "offline_for": {offline_for}}}')
                     else:
                         self.online_queue[on] = {
                             "time": int(msg['timestamp']),
