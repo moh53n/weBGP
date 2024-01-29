@@ -1,5 +1,6 @@
 import time
 
+#TODO: Maybe use FIFO and a thread here? Or use set for offlines and let the FIFO/classifier handler offline_for, etc
 #TODO: Probably we're going to have race conditions, fix the async thing by making sure where to wait
 #TODO: Yes we're having race condition and delays, must work with the timestamp of the RIS message
 #TODO: Implement the queue time limit
