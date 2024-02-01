@@ -4,6 +4,7 @@ import json
 
 #TODO: Maybe use a more standard structure, make param a dict (params), etc?
 #TODO: Fix param texts, even I can't understand them
+#TODO: Maybe use a subscribe command, in case of we need other commands too?
 class WS_Main:
     def __init__(self):
         self.live_dispatch_sub_list = set()
