@@ -1,6 +1,6 @@
 import time
 
-#TODO: Maybe use FIFO and a thread here? Or use set for offlines and let the FIFO/classifier handler offline_for, etc
+#TODO: Maybe use FIFO and a thread here? Or use set for offlines and let the FIFO/classifier handler offline_for, etc (or maybe an RIS FIFO)
 #TODO: Probably we're going to have race conditions, fix the async thing by making sure where to wait
 #TODO: Yes we're having race condition and delays, must work with the timestamp of the RIS message
 #TODO: Implement the queue time limit
@@ -31,7 +31,7 @@ class Handler:
                         if self.offline_queue[off]['peers'] >= 40:    #TODO: Let the user set this
                             self.offlines[off] = self.offline_queue[off]['time']
                             del(self.offline_queue[off])    #TODO: Possible race condition?
-                            fifo.add(f'{{"prefix": "{off}", "update": "offline"}}')
+                            fifo.add_live_offline(off)
                     else:
                         self.offline_queue[off] = {
                             "time": int(msg['timestamp']),
@@ -48,7 +48,7 @@ class Handler:
                             offline_for = self.online_queue[on]["time"] - self.offlines[on]
                             del(self.online_queue[on])    #TODO: Possible race condition?
                             del(self.offlines[on])
-                            fifo.add(f'{{"prefix": "{on}", "update": "online", "offline_for": {offline_for}}}')
+                            fifo.add_live_online(on, offline_for)
                     else:
                         self.online_queue[on] = {
                             "time": int(msg['timestamp']),

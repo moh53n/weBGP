@@ -6,7 +6,7 @@ import threading
 class Core:
     def __init__(self, prefixes, fifo):
         handler = Handler()
-        fifo_thread = threading.Thread(target=fifo.runner, args=())
+        fifo_thread = threading.Thread(target=fifo.live_runner, args=())
         fifo_thread.start()
         sub = Subscribe(prefixes, handler, fifo)
         sub_thread = threading.Thread(target=asyncio.run, args=(sub.run(),))

@@ -81,5 +81,8 @@ class WS_Main:
     def run_server(self):
         asyncio.run(self.main())
 
-    def dispatch_submit_update(self, update):
-        websockets.broadcast(self.live_dispatch_sub_list, update)
+    def dispatch_submit_live_update(self, update):
+        websockets.broadcast(self.live_dispatch_sub_list, json.dumps({
+            "type": "update",
+            "message": update
+        }))
