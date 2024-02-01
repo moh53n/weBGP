@@ -28,7 +28,7 @@ class WS_Main:
                     "status": "ok",
                     "param": "subscribed to channel live"
                 }))
-                return True
+                return self.live_dispatch_sub_list
             elif msg["channel"] == "offlines":
                 if "param" not in msg.keys():
                     await websocket.send(json.dumps({
@@ -52,7 +52,7 @@ class WS_Main:
                     "status": "ok",
                     "param": f"subscribed to channel offlines-{msg['param']}"
                 }))
-                return True
+                return self.offs_dispatch_sub_lists[int(msg["param"])]
             else:
                 await websocket.send(json.dumps({
                     "type": "internal",
@@ -67,11 +67,12 @@ class WS_Main:
 
     async def _register(self, websocket):
         sub_type = await websocket.recv()
-        if await self.parse_sub_type(sub_type, websocket):
+        sub_list = await self.parse_sub_type(sub_type, websocket)
+        if sub_list:
             try:
                 await websocket.wait_closed()
             finally:
-                self.live_dispatch_sub_list.remove(websocket)
+                sub_list.remove(websocket)
 
     async def main(self):
         async with websockets.serve(self._register, "127.0.0.1", 8000):
